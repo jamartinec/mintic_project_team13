@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="D:\Usuario\Documentos\GitHub\mintic_project_team13\mintic"
+VIRTUAL_ENV="D:\Usuario\Documentos\GitHub\mintic_proyecto_team13\mintic"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
