@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Index</title>
-</head>
+{% extends './base.html' %}
 
-<body>
+{% block title %}index{% endblock %}
+
+{% block body %}
 <section class="login">
   <header class="header-login">
 
@@ -21,7 +16,7 @@
           <a href="./Administrador/tablero.html"> Administrador </a>
         </button>
       </div>
-      
+           
       <div class="">
           <button>
             Super administrador 
@@ -51,7 +46,4 @@
 
   </div>
 </section>
-
-  
-</body>
-</html>
+{% endblock %}
