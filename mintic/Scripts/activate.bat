@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=D:\Usuario\Documentos\GitHub\mintic_proyecto_team13\mintic
+set VIRTUAL_ENV=C:\Users\cdiaz\Documents\Desarrollo\Java\Curso-Mintic2022\Ciclo 3\Proyecto\mintic_project_team13\mintic
 
 if not defined PROMPT set PROMPT=$P$G
 
