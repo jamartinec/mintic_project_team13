@@ -3,7 +3,7 @@ from sqlite3 import Error
 
 def sql_connection():
     try:
-        con=sqlite3.connect('baseDatos.db')
+        con=sqlite3.connect('mydatabase.db')
         return con
     except Error:
         print(Error)
@@ -48,6 +48,16 @@ def sql_insert_reserva(room_id: int, fecha_inicio_reserva: str, fecha_fin_reserv
               )
     last_row_id = connect_execute(strsql)
     return last_row_id
+
+def sql_select_reserva():
+    strsql="SELECT * FROM reservas;"
+    print(strsql)
+    con = sql_connection()
+    cursor_Obj = con.cursor()
+    cursor_Obj.execute(strsql)
+    reservas = cursor_Obj.fetchall()
+    con.close()
+    return reservas
 
 
 def sql_insert_huesped(reserva_id: int, numero_documento: str, nombre: str, mail: str):
