@@ -16,7 +16,8 @@
         <div class="field-wrap">
           <!-- Genera un campo oculto el cual incluye un token que se emplea para proteger los formularios de ataques tipo ESRF -->
           {{ data.form.user.label }}
-          {{ data.form.user }}
+          {{ data.form.user(placeholder="Ingresar usuario") }}
+          
           <!-- <label for="user">Usuario:</label>
           <input type="text" id="user" name="user" placeholder="Ingrese usuario" required autocomplete /> -->
         </div>
@@ -27,12 +28,12 @@
             autocomplete="off" /> -->
 
           {{ data.form.password.label }}
-          {{ data.form.password }}
+          {{ data.form.password(placeholder="Ingresar contraseña") }}
         </div>
 
         <div class="field-wrap">
           <!-- <button type="submit"><a href="./reservarHabitacion"> Ingresar </a> </button> -->
-          {{ data.form.sendForm }} 
+          {{ data.form.sendForm(placeholder="Ingresar usuario", class="button-login") }}
           {{ data.form.hidden_tag() }}
         </div>
 

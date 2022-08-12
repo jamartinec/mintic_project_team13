@@ -8,6 +8,3 @@ class FormLogin(FlaskForm):
     password = PasswordField("Contraseña", validators = [DataRequired(message = 'Ingrese contraseña')])
     remember = BooleanField("Recordar usuario")
     sendForm = SubmitField("Iniciar sesión")
-
-
-

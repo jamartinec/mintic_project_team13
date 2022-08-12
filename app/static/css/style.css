@@ -9,8 +9,7 @@
 }
 
 body {
-  background: #518A95;
-  font-family: "Roboto", sans-serif;
+  background: #518A95 !important
 }
 
 header {
@@ -22,6 +21,17 @@ h1 {
   color: #ffffff;
   font-weight: 300;
   margin: 20px 40px;
+}
+
+nav {
+  text-align: end !important;
+  width: 80%;
+  margin: 30px auto;
+  background: #19545F !important;
+}
+
+nav ul {
+  list-style: none;
 }
 
 .field-wrap {
@@ -72,7 +82,7 @@ h1 {
   font-size: 14px;
 }
 
-.form button {
+.form .button-login {
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   outline: 0;
@@ -87,18 +97,18 @@ h1 {
   cursor: pointer;
 }
 
-.form button:hover,
-.form button:active,
-.form button:focus {
+.form .button-login:hover,
+.form .button-login:active,
+.form .button-login:focus {
   background: #519BA9;
 }
 
-.form button a {
+.form .button-login a {
   text-decoration: none;
   color: #ffffff;
 }
 
-.navegacion {
+/* .navegacion {
   text-align: end;
   width: 80%;
   margin: 30px auto;
@@ -107,7 +117,7 @@ h1 {
 
 .navegacion ul {
   list-style: none;
-}
+} */
 
 .menu>li {
   position: relative;

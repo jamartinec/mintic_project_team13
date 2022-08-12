@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect, request
+from flask import request, Flask, render_template, jsonify, url_for, session, make_response, g
 from forms.formLogin import FormLogin
 from settings.config import Configuration
 
@@ -6,36 +6,57 @@ app = Flask(__name__)
 
 app.config.from_object(Configuration)
 
+
+@app.before_request
+def before_request():
+    if 'usuario' in session:
+        g.user = "Usuario logueado"
+    else:
+        g.user = None
+
 # Ruta principal, inicio de la aplicación
+
+
 @app.route('/')
 def index():
     data = {
         'title': 'Inicio',
         'description': "Hotel Mintic Ciclo 3 NCR 1873"
     }
-    return render_template('index.html', data = data)
+    session['usuario'] = "Brayan"   
+    visited = request.cookies.get("visited")
+    if visited == 'True':
+        return render_template("index.html", data = data)
+    else:
+        response = make_response(render_template(
+            'index.html', data = data))
+        return response
 
 # Ruta para el login del usuario
-@app.route('/iniciarSesion')
+@app.route('/iniciarSesion', methods=["GET", "POST"])
 def login():
     data = {
         'title': 'Iniciar Sesion',
         'description': "Hotel Mintic Ciclo 3 NCR 1873",
         'form': FormLogin()
     }
-    return render_template('iniciarSesion.html', data = data)
+    return render_template('iniciarSesion.html', data=data)
 
     # Ruta para el registro del usuario
-@app.route('/registrar')
+
+
+@app.route('/registrar', methods=["GET", "POST"])
 def register():
     data = {
         'title': 'Registrar Usuario',
         'description': "Hotel Mintic Ciclo 3 NCR 1873",
         'form': FormLogin()
     }
-    return render_template('crearUsuario.html', data = data)
+    return render_template('crearUsuario.html', data=data)
 
 # Función para validar cuando no es una ruta válida y se redirecciona al index
+
+
 def pageNoFound(error):
     data = {
         'title': 'Página no encontrada',
