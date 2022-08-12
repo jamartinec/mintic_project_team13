@@ -1,49 +1,36 @@
 {% extends './base.html' %}
 
-{% block title %}index{% endblock %}
+{% block title %}
+{{data.title}}
+{% endblock %}
 
 {% block body %}
-<section class="login">
-  <header class="header-login">
 
-    <div>
-      <h1> Reserva Tu Habitación Prueba </h1>
-    </div>
+<form action="" method="post">
 
-    <div>
-      <div class="">
-        <button>
-          <a href="./Administrador/tablero.html"> Administrador </a>
-        </button>
-      </div>
-           
-      <div class="">
-          <button>
-            Super administrador 
-          </button>
-      </div>
-    </div>
+  <header>
+    <nav class="navegacion">
+      <ul class="menu">
+        <li><a href="/iniciarSesion">Iniciar sesión</a></li>
+        <li><a href="/registrar">Registrar</a></li>
+        <li><a href="#">Imágenes</a></li>
+        <li><a href="#">Contacto</a></li>
+      </ul>
+    </nav>
   </header>
 
-
-  <div class="login-container">
-      
-    <div class="">
-      <button>
-        <a href="iniciarSesion.html"> Iniciar sesión</a>
-      </button>
+  <section>
+    <div class="slider">
+      <ul>
+        <li><img src="{{ url_for('static',filename='img/habitacion1.jpg') }}" alt="habitacion 1"></li>
+        <li><img src="{{ url_for('static',filename='img/habitacion2.jpg') }}" alt="habitacion 2"></li>
+        <li><img src="{{ url_for('static',filename='img/habitacion3.jpg') }}" alt="habitacion 3"></li>
+        <li><img src="{{ url_for('static',filename='img/habitacion4.jpg') }}" alt="habitacion 4"></li>
+        <li><img src="{{ url_for('static',filename='img/habitacion5.jpg') }}" alt="habitacion 5"></li>
+        <li><img src="{{ url_for('static',filename='img/habitacion6.jpg') }}" alt="habitacion 6"></li>
+      </ul>
     </div>
-    
-    <div class="">
-        <button>
-          <a href="./crearUsuario.html"> Crear usuario </a>
-        </button>
-    </div>
-
-    <div>
-      <img src="https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="habitacion">
-    </div>
-
-  </div>
-</section>
+  </section>
+</form>
+</body>
 {% endblock %}

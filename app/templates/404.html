@@ -1,0 +1,9 @@
+{% extends './base.html' %}
+
+{% block title %}
+{{data.title}}
+{% endblock %}
+
+{% block body %}
+    <img class="error-404" src="{{ url_for('static',filename='img/error-404.png') }}" alt="erro 404"">
+{% endblock %}
