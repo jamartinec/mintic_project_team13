@@ -5,6 +5,24 @@
 {% endblock %}
 
 {% block body %}
+<table id="tabla">
+  <tbody>
+      <tr>
+          <th>Id</th>
+          <th>Nombre</th>
+          <th>Precio</th>
+          <th>Cantidad</th>
+      </tr>
+      {% for reserv in l_reservas %}
+          <tr>
+              <td>{% print (reserv[0]) %}</td>
+              <td>{{ reserv[1] }}</td>
+              <td>{{ reserv[2] }}</td>
+              <td>{{ reserv[3] }}</td>
+          </tr>
+      {% endfor %}
+  </tbody>
+</table>
 <div class="container">
   <section class="">
     <div class="row">
