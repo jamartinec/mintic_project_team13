@@ -1,96 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
+{% extends './base.html' %}
 
-  <section class="">
-    <header class="">
-  
-      <div>
-        <h1> Reserva Tu Habitacioón </h1>
-      </div>
-  
-      <div>
-        <div class="">
-          <button>
-            <a href="./editarReserva.html">Editar reserva </a> 
-          </button>
-        </div>      
-      </div>
-    </header>
-  
-  
-    <div class="">
-        
-      <div class="">
-        <img src="https://images.pexels.com/photos/279746/pexels-photo-279746.jpeg?auto=compress&cs=tinysrgb&w=400" alt="habitacion">
+{% block title %}
+{{ data.title }}
+{% endblock %}
 
-        <p><stron>Comentarios: </stron>  Ésta habitación es muy bonita </p>
+{% block body %}
 
-        <div> Estrellas ... </div>
-        <button>
-          <a href=""> Reservar</a>
-        </button>
-        <button>
-          <a href=""> Calificar </a>
-        </button>
-      </div>
+<section class="">
 
-      <div class="">
-        <img src="https://images.pexels.com/photos/279746/pexels-photo-279746.jpeg?auto=compress&cs=tinysrgb&w=400" alt="habitacion">
-
-        <p><stron>Comentarios: </stron>  Me gustó el servicio a la habitación </p>
-
-        <div> Estrellas ... </div>
-        <button>
-          <a href=""> Reservar</a>
-        </button>
-        <button>
-          <a href=""> Calificar </a>
-        </button>
-      </div>
-
-      <div class="">
-        <img src="https://images.pexels.com/photos/279746/pexels-photo-279746.jpeg?auto=compress&cs=tinysrgb&w=400" alt="habitacion">
-
-        <p><stron>Comentarios: </stron>  Volveré...  </p>
-
-        <div> Estrellas ... </div>
-        <button>
-          <a href=""> Reservar</a>
-        </button>
-        <button>
-          <a href=""> Calificar </a>
-        </button>
-      </div>
-
-      <div class="">
-        <img src="https://images.pexels.com/photos/279746/pexels-photo-279746.jpeg?auto=compress&cs=tinysrgb&w=400" alt="habitacion">
-
-        <p><stron>Comentarios: </stron>  Excelente servicio! </p>
-
-        <div> Estrellas ... </div>
-        <button>
-          <a href=""> Reservar</a>
-        </button>
-        <button>
-          <a href=""> Calificar </a>
-        </button>
-      </div>
-      
-      
-  
+  <header class="">
+    <div>
+      <h1> Reserva Tu Habitacioón </h1>
     </div>
-  </section>
-  
+  </header>
 
+  {% for room in data.listRoom %}
+  <div class="card">
+    <img src="{{ room[3] }}" class="d-block w-100" alt="{{ room[0] }}">
+    <div class="card-body">
+      <h5 class="card-title">{{ room[1] }}</h5>
+      <p class="card-text">Habitación: {{ room[0] }}</p>
+      <p class="card-text">Calificación: {{ room[2] }}</p>
+      <div class="container shadow py-2">
+        <form action="" method="post" novalidate>
+          <div class="row justify-content-center">
+            <div class="col-lg-6 col-sm-12">
+              {{ form.dateIni.label(class="form-label") }}
+              {{ form.dateIni(class="form-control", type="date") }}
+              {% for error in form.dateIni.errors %}
+              <small class="error-small">{{ error }}</small>
+              {% endfor %}
+            </div>
+            <div class="col-lg-6 col-sm-12 field-wrap">
+              {{ form.dateFin.label(class="form-label") }}
+              {{ form.dateFin(class="form-control", type="date") }}
+              {% for error in form.dateFin.errors %}
+              <small class="error-small">{{ error }}</small>
+              {% endfor %}
+            </div>
 
+            <div class="col-lg-12 col-sm-24 align-items-start field-wrap">
+              {{ form.cantPerson.label(class="form-label") }}
+            </div>
 
-  
-</body>
-</html>
+            <div class="row align-items-center field-wrap">
+              <div class="col">
+                <button type="button" class="button-login" onclick="increase()">+</button>
+              </div>
+              <div class="col">
+
+                {{ form.cantPerson(class="form-control text-cant-per", type="number", min="0", step="1", value="0", id="counter") }}
+                {% for error in form.cantPerson.errors %}
+                <small class="error-small">{{ error }}</small>
+                {% endfor %}
+              </div>
+              <div class="col">
+                <button type="button" class="button-login" onclick="decrease()">-</button>
+              </div>
+            </div>
+
+            <div class="col-lg-12 col-sm-24 field-wrap">
+              {{ form.reserveForm(class="button-login") }}
+              {{ form.hidden_tag() }}
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+  {% endfor %}
+
+  {% endblock %}

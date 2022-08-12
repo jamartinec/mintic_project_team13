@@ -34,7 +34,23 @@ nav ul {
   list-style: none;
 }
 
+.text-cant-per {
+  text-align: center;
+}
+
+.card {
+  display: inline;
+  margin: 30px auto;
+  width: 50%;
+}
+
 .field-wrap {
+  display: block;
+  margin: 15px auto;
+  align-items: center;
+}
+
+.field-wrap small{
   display: block;
   margin: auto;
 }
@@ -54,13 +70,6 @@ nav ul {
   margin: auto;
 }
 
-.form h1 {
-  text-align: center;
-  color: #000000;
-  font-weight: 300;
-  margin: 0 0 40px;
-}
-
 .content {
   width: 100%;
   height: 100%;
@@ -70,32 +79,42 @@ nav ul {
   position: relative;
   background: #FFFFFF;
   max-width: 30%;
-  margin: 10% auto;
+  margin: 5% auto;
   padding: 45px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
+.form h1 {
+  text-align: center;
+  color: #000000;
+  font-weight: 300;
+  margin: 0 0 40px;
+}
 .form input {
   font-family: "Roboto", sans-serif;
   outline: 0;
   background: #f2f2f2;
   width: 100%;
   border: 0;
-  margin: 0 0 15px;
-  padding: 15px;
   box-sizing: border-box;
   font-size: 14px;
 }
 
-.form .button-login {
+.form .error-small {
+  text-align: left;
+  color: red;
+}
+
+.button-login {
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   outline: 0;
-  background: #19545F;
+  background: #19545F !important;
   width: 100%;
   border: 0;
-  padding: 15px;
+  padding: 10px;
+  /* margin: 10px; */
   color: #ffffff;
   font-size: 14px;
   -webkit-transition: all 0.3 ease;
@@ -103,15 +122,15 @@ nav ul {
   cursor: pointer;
 }
 
-.form .button-login:hover,
-.form .button-login:active,
-.form .button-login:focus {
-  background: #519BA9;
+.button-login:hover,
+.button-login:active,
+.button-login:focus {
+  background: #519BA9 !important;
 }
 
-.form .button-login a {
+.button-login a {
   text-decoration: none;
-  color: #ffffff;
+  color: #ffffff !important;
 }
 
 /* .navegacion {
