@@ -1,6 +1,7 @@
 from flask import request, Flask, flash, render_template, jsonify, url_for, session, make_response, g, redirect
 from forms.formLogin import FormLogin
 from settings.config import Configuration
+import database as bd 
 
 app = Flask(__name__)
 
@@ -52,6 +53,27 @@ def register():
         'form': FormLogin()
     }
     return render_template('crearUsuario.html', data=data)
+
+@app.route('/editarReserva')
+def getProductos():
+    lista_reservas = bd.sql_select_reserva()
+    flash("Lista de reservas")
+    return render_template('editarReserva.html',l_reservas=lista_reservas,titulo="Lista de reservas")
+
+
+# @app.route('/nuevo',methods=['GET', 'POST'])
+# def Nuevo():
+#     if request.method == 'GET':
+#         form = FormLogin()
+#         return render_template('nuevo.html',form=form,titulo="Registro de nuevo producto")
+#     if request.method == 'POST':
+#         code = request.form["codigo"]
+#         nombre = request.form["nombre"]
+#         precio= request.form["precio"]
+#         cantidad= request.form["cantidad"]
+#         bd.sql_insert_producto(code,nombre,precio,cantidad)
+#         flash(f'Producto {nombre} registrado con exito!')
+#         return render_template('base.html',titulo="Registro de nuevo producto")
 
 # Ruta para editarReservaciones del Usuario
 
