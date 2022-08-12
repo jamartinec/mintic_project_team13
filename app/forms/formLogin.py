@@ -8,3 +8,6 @@ class FormLogin(FlaskForm):
     password = PasswordField("Contraseña", validators = [DataRequired(message = 'Ingrese contraseña')])
     remember = BooleanField("Recordar usuario")
     sendForm = SubmitField("Iniciar sesión")
+
+class FormLReservar(FlaskForm):
+    search = StringField("Buscar", validators = [DataRequired(message = 'Campo requerido') ])
