@@ -9,5 +9,5 @@ class FormLogin(FlaskForm):
     remember = BooleanField("Recordar usuario")
     sendForm = SubmitField("Iniciar sesión")
 
-class FormLReservar(FlaskForm):
+class FormReserve(FlaskForm):
     search = StringField("Buscar", validators = [DataRequired(message = 'Campo requerido') ])
