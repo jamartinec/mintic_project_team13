@@ -16,7 +16,6 @@ def before_request():
 
 # Ruta principal, inicio de la aplicación
 
-
 @app.route('/')
 def index():
     data = {
@@ -42,7 +41,7 @@ def login():
     }
     return render_template('iniciarSesion.html', data=data)
 
-    # Ruta para el registro del usuario
+# Ruta para el registro del usuario
 
 
 @app.route('/registrar', methods=["GET", "POST"])
@@ -53,6 +52,17 @@ def register():
         'form': FormLogin()
     }
     return render_template('crearUsuario.html', data=data)
+
+# Ruta para editarReservaciones del Usuario
+
+@app.route('/editarReserva', methods=["GET", "POST"])
+def editBooking():
+    data = {
+        'title': 'EditarReserva',
+        'description': "Editar Reservaciones",
+        'form': FormLogin()
+    }
+    return render_template('editarReserva.html', data=data)
 
 # Función para validar cuando no es una ruta válida y se redirecciona al index
 
