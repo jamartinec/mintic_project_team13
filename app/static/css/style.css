@@ -185,3 +185,9 @@ nav ul {
   90% { margin-left: -500%; }
   100% { margin-left: -500%; }
 }
+.row{
+  background-color: #f2f2f2;
+}
+.title-misReservas{
+  color: #000000;
+}
