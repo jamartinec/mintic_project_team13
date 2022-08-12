@@ -1,82 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
+{% extends './base.html' %}
 
-  
+{% block title %}
+{{ data.title }}
+{% endblock %}
+
+{% block body %}
+<div class="container">
   <section class="">
-    <header class="">
+    <div class="row">
   
-      <div>
-        <h1> Edita tu reserva </h1>
-      </div>
-  
-    </header>
-  
-  
-    <div class="">
-
+      <!-- Barra de busqueda de reservas -->
       <div class="">
         <div class="">
-          <button>
-            <a href> Buscar  </a> 
-          </button>
+          <button type="button" class="btn btn-outline-success">Buscar</button>
         </div>     
         <div>
-          <input id="reservas" name="reservas"> mis reservas </input>
+          <input id="reservas" name="reservas">
+          <h1 class="title-misReservas">Mis reservas</h1>
+        </input>
         </div>
-        
       </div>
-        
-      <div class="">
-        <img src="https://images.pexels.com/photos/279746/pexels-photo-279746.jpeg?auto=compress&cs=tinysrgb&w=400" alt="habitacion">
-
+       
+      <!-- Reserva y sus ediciones -->
+      <div class="col-md-4">
+        <img class="img-habitacion" src="https://images.pexels.com/photos/279746/pexels-photo-279746.jpeg?auto=compress&cs=tinysrgb&w=400" alt="habitacion">
         <p>Reserva #1234 </p>
-        <button>
-          <a href=""> Editar </a>
-        </button>
-        <button>
-          <a href=""> Cancelar </a>
-        </button>
+        <button type="button" class="btn btn-outline-success">Editar</button>
+        <button type="button" class="btn btn-outline-danger">Cancelar</button>
       </div>
-
-
-      <div class="">
-        <img src="https://images.pexels.com/photos/279746/pexels-photo-279746.jpeg?auto=compress&cs=tinysrgb&w=400" alt="habitacion">
-
-        <p>Reserva #5678 </p>
-        <button>
-          <a href=""> Editar </a>
-        </button>
-        <button>
-          <a href=""> Cancelar </a>
-        </button>
-      </div>
-
-
-      <div class="">
-        <img src="https://images.pexels.com/photos/279746/pexels-photo-279746.jpeg?auto=compress&cs=tinysrgb&w=400" alt="habitacion">
-
-        <p>Reserva #9876 </p>
-        <button>
-          <a href=""> Editar </a>
-        </button>
-        <button>
-          <a href=""> Cancelar </a>
-        </button>
-      </div>
-
-      
-      
   
     </div>
   </section>
 
+</div>
+
+{% endblock %}
+
   
-</body>
-</html>
+  
