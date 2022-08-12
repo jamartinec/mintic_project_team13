@@ -42,7 +42,7 @@ def login():
     }
     return render_template('iniciarSesion.html', data=data)
 
-# Ruta para el registro del usuario
+# Ruta para el registro del usuario 
 
 
 @app.route('/registrar', methods=["GET", "POST"])
