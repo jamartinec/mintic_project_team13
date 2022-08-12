@@ -8,3 +8,4 @@ class FormLogin(FlaskForm):
     password = PasswordField("Contraseña", validators = [DataRequired(message = 'Campo Contraseña requerido'), Length(min = 8, max = 15 ,message="La contraseña debe tener minimo 8 caracteres y maximo 15")])
     remember = BooleanField("Recordar usuario")
     sendForm = SubmitField("Iniciar sesión")
+
