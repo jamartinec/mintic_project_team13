@@ -83,7 +83,7 @@ def reserveRoom():
     }
     return render_template('reservarHabitacion.html', data=data, form=formulario)
 
-# Ruta para el registro del usuario
+# Ruta para el registro del usuario 
 
 
 @app.route('/registrar', methods=["GET", "POST"])
