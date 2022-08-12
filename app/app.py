@@ -1,4 +1,4 @@
-from flask import request, Flask, render_template, jsonify, url_for, session, make_response, g
+from flask import request, Flask, flash, render_template, jsonify, url_for, session, make_response, g, redirect
 from forms.formLogin import FormLogin
 from settings.config import Configuration
 
@@ -65,6 +65,11 @@ def pageNoFound(error):
     # return render_template('404.html', data = data), 404
     return redirect(url_for('index'))
 
+@app.route('/cerrar')
+def cerrar():
+    flash("Sesion cerrada")
+    session.clear()
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.register_error_handler(404, pageNoFound)
