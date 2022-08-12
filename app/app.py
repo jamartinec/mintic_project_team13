@@ -18,7 +18,6 @@ def before_request():
 
 # Ruta principal, inicio de la aplicación
 
-
 @app.route('/')
 def index():
     visited = request.cookies.get("visited")
@@ -98,6 +97,17 @@ def register():
     if formulario.validate_on_submit():
         return redirect(url_for('index'))
     return render_template('crearUsuario.html', data=data, form=formulario)
+
+# Ruta para editarReservaciones del Usuario
+
+@app.route('/editarReserva', methods=["GET", "POST"])
+def editBooking():
+    data = {
+        'title': 'EditarReserva',
+        'description': "Editar Reservaciones",
+        'form': FormLogin()
+    }
+    return render_template('editarReserva.html', data=data)
 
 # Función para validar cuando no es una ruta válida y se redirecciona al index
 
