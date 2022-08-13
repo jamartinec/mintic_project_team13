@@ -9,4 +9,4 @@ class FormReserve(FlaskForm):
     dateIni = StringField("Fecha de ingreso", validators=[DataRequired(message='Campo nombre requerido')])
     dateFin = StringField("Fecha de salida", validators=[DataRequired(message='Campo usuario requerido')])
     cantPerson = StringField("Cantidad de personas", validators=[DataRequired(message='Campo Contraseña requerido')])
-    reserveForm = SubmitField("Reservar")
+    reserveForm = SubmitField("Reservar habitación")
