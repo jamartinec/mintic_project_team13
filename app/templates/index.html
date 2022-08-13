@@ -6,13 +6,12 @@
 
 {% block body %}
 
-</div>
 <form action="" method="post">
   <section>
     <div class="slider">
       <ul>
-        {% for room in data.listRoom %}
-        <li><img src="{{ room[3] }}" class="d-block w-100" alt="{{ room[0] }}"></li>
+        {% for rooms in data.listRoom %}
+        <li><img src="{{ rooms[5] }}" class="d-block w-100" alt="{{ rooms[1] }}"></li>
         {% endfor %}
       </ul>
     </div>
