@@ -27,11 +27,19 @@ nav {
   text-align: end !important;
   width: 80%;
   margin: 30px auto;
-  background: #19545F !important;
 }
 
 nav ul {
   list-style: none;
+}
+
+.nav-link:hover {
+  color: #CE7D35 !important;
+}
+
+.alert {
+  width:  80%;
+  margin: 20px auto;
 }
 
 .text-cant-per {

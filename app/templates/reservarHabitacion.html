@@ -7,20 +7,21 @@
 {% block body %}
 
 <section class="">
-
   <header class="">
     <div>
-      <h1> Reserva Tu Habitacioón </h1>
+      <h1> Reserva tu habitación </h1>
     </div>
   </header>
 
-  {% for room in data.listRoom %}
+  {% for rooms in data.listRoom %}
+
   <div class="card">
-    <img src="{{ room[3] }}" class="d-block w-100" alt="{{ room[0] }}">
+    <img src="{{ rooms[5] }}" class="d-block w-100" alt="{{ rooms[1] }}">
     <div class="card-body">
-      <h5 class="card-title">{{ room[1] }}</h5>
-      <p class="card-text">Habitación: {{ room[0] }}</p>
-      <p class="card-text">Calificación: {{ room[2] }}</p>
+      <h5 class="card-title">Habitación: {{ rooms[1] }}</h5>
+      <p class="card-text">Cantidad de huéspedes: {{ rooms[2] }}</p>
+      <p class="card-text">Cantidad de camas: {{ rooms[3] }}</p>
+      <p class="card-text">Calificación: {{ rooms[4] }}</p>
       <div class="container shadow py-2">
         <form action="" method="post" novalidate>
           <div class="row justify-content-center">
@@ -44,19 +45,11 @@
             </div>
 
             <div class="row align-items-center field-wrap">
-              <div class="col">
-                <button type="button" class="button-login" onclick="increase()">+</button>
-              </div>
-              <div class="col">
-
-                {{ form.cantPerson(class="form-control text-cant-per", type="number", min="0", step="1", value="0", id="counter") }}
-                {% for error in form.cantPerson.errors %}
-                <small class="error-small">{{ error }}</small>
-                {% endfor %}
-              </div>
-              <div class="col">
-                <button type="button" class="button-login" onclick="decrease()">-</button>
-              </div>
+              {{ form.cantPerson(class="form-control text-cant-per", type="number", min="0", step="1", value="0",
+              id="counter") }}
+              {% for error in form.cantPerson.errors %}
+              <small class="error-small">{{ error }}</small>
+              {% endfor %}
             </div>
 
             <div class="col-lg-12 col-sm-24 field-wrap">
@@ -68,8 +61,7 @@
         </form>
       </div>
     </div>
-
   </div>
   {% endfor %}
-
-  {% endblock %}
+</section>
+{% endblock %}
