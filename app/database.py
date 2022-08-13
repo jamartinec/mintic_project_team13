@@ -156,3 +156,4 @@ def update_room_score(room_id: int, new_calificacion: float):
         cur.execute(strsql)
         con.commit()
     
+    
