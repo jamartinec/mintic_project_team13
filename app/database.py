@@ -52,8 +52,8 @@ def sql_insert_reserva(room_id: int, fecha_inicio_reserva: str, fecha_fin_reserv
 
 def sql_insert_huesped(reserva_id: int, numero_documento: str, nombre: str, mail: str):
     strsql = (
-    "INSERT INTO reservas (reserva_id, numero_documento, nombre, mail) VALUES (?,?,?,?)",
-    (reserva_id, numero_documento, nombre, mail)
+        "INSERT INTO reservas (reserva_id, numero_documento, nombre, mail) VALUES (?,?,?,?)",
+        (reserva_id, numero_documento, nombre, mail)
     )
     connect_execute(strsql)
 
@@ -121,6 +121,7 @@ def sql_update_reserva(reserva_id: int, room_id: int, fecha_inicio_reserva: str,
         cur.execute(strsql)
         con.commit()
 
+
 def sql_insert_calificacion(reserva_id, room_id, fecha_calificacion, comentario, calificacion):
     strsql = (
         "INSERT INTO calificaciones (reserva_id, room_id, fecha_calificacion, comentario, calificacion) VALUES (?,?, ?, ?,?)",
@@ -149,11 +150,10 @@ def update_room_score(room_id: int, new_calificacion: float):
     conteo = count_number_calif_room(room_id)
     new_calif_prom = (conteo/(conteo+1))*calificacion_prom + (new_calificacion / (conteo + 1))
     strsql = ("UPDATE habitacion SET calificacion = ? WHERE room_id=?",
-        (new_calif_prom, room_id)
+              (new_calif_prom, room_id)
               )
     with sql_connection()() as con:
         cur = con.cursor()
         cur.execute(strsql)
         con.commit()
-    
     
