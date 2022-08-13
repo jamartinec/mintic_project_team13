@@ -14,7 +14,7 @@
 
         <div class="col-lg-12 col-sm-24 field-wrap">
           {{ form.user.label(class="form-label") }}
-          {{ form.user(placeholder="Ingresar usuario", class="form-control") }}
+          {{ form.user(placeholder="Ingresar usuario", class="form-control", value=data.userRemember) }}
           {% for error in form.user.errors %}
           <small class="error-small">{{ error }}</small>
           {% endfor %}
@@ -34,7 +34,7 @@
         </div>
 
         <div class="field-wrap-check field-wrap">
-          {{ form.remember(class="check-input") }}
+          {{ form.remember(class="check-input", checked=data.checkRemember) }}
           {{ form.remember.label(class="form-label") }}
         </div>
 
