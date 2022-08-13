@@ -43,11 +43,9 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/registrar"><strong>Registrar</strong></a>
             </li>
-            {% if session['type_user'] == 1 or session['type_user'] == 2 %}
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/editarReserva"><strong>Editar Reserva</strong></a>
             </li>
-            {% endif %}
             {% else %}
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/iniciarSesion"><strong>Iniciar sesión</strong></a>
