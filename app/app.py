@@ -11,20 +11,38 @@ app = Flask(__name__)
 
 app.config.from_object(Configuration)
 
+listUsers = []
+listTypeUser = []
 listRoom = []
 
-# @app.before_request
-# def before_request():
-#     listRoom = db.sql_consultar_habitaciones()
-#     print("listRoom: ", listRoom[0][5])
+@app.before_request
+def before_request():
+    getListRooms()
+    getUser()
+    getTypeUser()
 
+def getUser():
+    global listUsers 
+    listUsers = db.sql_consultar_usuarios()
+    if len(listUsers) == 0:
+        passwordHash = generate_password_hash("SuperAdmin", method='sha256')
+        last_row_id = db.sql_insert_user("SuperAdmin", datetime.now(), "SuperAdmin", "soporte@hotel.com", "123456789", "123456789", 1)
+        db.sql_insert_contrasena(last_row_id, "SuperAdmin", passwordHash)
+
+def getTypeUser():
+    global listTypeUser
+    listTypeUser = db.sql_consultar_type_usuarios()
+
+def getListRooms():
+    global listRoom
+    listRoom = db.sql_consultar_habitaciones()
 
 # Ruta principal, inicio de la aplicación
 
 
 @app.route('/')
 def index():
-    listRoom = db.sql_consultar_habitaciones()
+    global listRoom
     visited = request.cookies.get("visited")
     formulario = FormReserve()
     # listRoom = [["101", "Habitación Especial", "5", "https://i.pinimg.com/originals/4d/2a/c6/4d2ac66204416672fcc444b2bf2e6ac6.jpg"], ["102", "Habitación Sencilla", "3.5", "https://3.bp.blogspot.com/-0TJZXFkn1jo/XHoG0-VpbKI/AAAAAAAADFc/GMkvLd_D6Dkbl6nJy5u6JgSsCdj5mknBgCLcBGAs/s640/Asian%252Binspired%252Bluxurious%252Bbedroom.jpg"], ["103", "Habitación Sencilla", "4", "https://casaydiseno.com/wp-content/uploads/2020/09/habitacion-suite-ideas-diseno-chimenea.jpg"],
@@ -33,7 +51,8 @@ def index():
         data = {
             'title': 'Reservar Habitación',
             'description': "Hotel Mintic Ciclo 3 NCR 1873",
-            'listRoom': listRoom
+            'listRoom': listRoom,
+            'listTypeUser': listTypeUser
         }
         return render_template("reservarHabitacion.html", data=data, form=formulario)
     else:
@@ -50,7 +69,7 @@ def index():
 @app.route('/iniciarSesion', methods=["GET", "POST"])
 def login():
 
-    listRoom = db.sql_consultar_habitaciones()
+    global listRoom
     if request.cookies.get("remember") == 'True':
         checkRemember = True
     else:
@@ -75,22 +94,22 @@ def login():
             password = request.form.get("password")
             remember = formulario.remember.data
 
-            userInfo = db.sql_consultar_usuario(user)
+            userInfoLogin = db.sql_consultar_usuario(user)
 
-            if userInfo is not None:
-                passwordHash = userInfo[2]
+            if userInfoLogin is not None:
+                userInfo = db.sql_consultar_usuario_name(user)
+                passwordHash = userInfoLogin[2]
                 if check_password_hash(passwordHash, password):
                     session['usuario'] = userInfo[1]
+                    session['type_user'] = userInfo[7]
                     response = make_response(render_template(
                         'reservarHabitacion.html', data=data, form=formularioReserve))
                     response.set_cookie('visited', 'True')
                     flash(f'Usuario {userInfo[1]} logueado correctamente!')
                     if remember:
-                        print("remember if: ", remember)
                         response.set_cookie('user', session['usuario'])
                         response.set_cookie('remember', 'True')
                     else:
-                        print("remember else: ", remember)
                         response.set_cookie('user', "")
                         response.set_cookie('remember', 'False')
                     return response
@@ -104,9 +123,7 @@ def login():
 # Ruta para reservar habitación del usuario
 @app.route('/reserveRoom', methods=["GET", "POST"])
 def reserveRoom():
-    listRoom = db.sql_consultar_habitaciones()
-    # listRoom = [["101", "Habitación Especial", "5", "https://i.pinimg.com/originals/4d/2a/c6/4d2ac66204416672fcc444b2bf2e6ac6.jpg"], ["102", "Habitación Sencilla", "3.5", "https://3.bp.blogspot.com/-0TJZXFkn1jo/XHoG0-VpbKI/AAAAAAAADFc/GMkvLd_D6Dkbl6nJy5u6JgSsCdj5mknBgCLcBGAs/s640/Asian%252Binspired%252Bluxurious%252Bbedroom.jpg"], ["103", "Habitación Sencilla", "4", "https://casaydiseno.com/wp-content/uploads/2020/09/habitacion-suite-ideas-diseno-chimenea.jpg"],
-    #             ["104", "Habitación Matrimonial", "5", "http://2.bp.blogspot.com/-gW8qrVLtUhE/URm12WBuQfI/AAAAAAAAig8/4BsvHqf8PDg/s1600/dormitorio-paredes-chocolate.jpg"], ["105", "Habitación Sencilla", "5", "https://www.guiaparadecorar.com/wp-content/uploads/2016/02/12-impresionantes-y-lujosas-habitaciones-de-hotel-04-e1456292481895.jpg"], ["106", "Habitación Sencilla", "3.9", "https://casaydiseno.com/wp-content/uploads/2015/03/cama-grande-techo-l%C3%A1mpara.jpg"]]
+    global listRoom
     formulario = FormReserve()
     data = {
         'title': 'Reservar Habitación',
@@ -132,6 +149,7 @@ def register():
         return render_template('crearUsuario.html', data=data, form=formulario)
 
     if request.method == 'POST':
+        
         if formulario.validate_on_submit():
             user = request.form.get("user")
             name = request.form.get("name")
@@ -140,12 +158,17 @@ def register():
             contact = request.form.get("contact")
             passwordHash = generate_password_hash(
                 request.form["password"], method='sha256')
+            
+            typeUSer = request.form.get("typeUsers")
 
+            if typeUSer is None:
+                typeUSer = 3
+            
             if db.sql_existe_usuario(user, email) > 0:
                 flash(f'Usuario {user} ya existe!')
             else:
                 last_row_id = db.sql_insert_user(
-                    user, datetime.now(), name, email, document, contact, 3)
+                    user, datetime.now(), name, email, document, contact, typeUSer)
                 db.sql_insert_contrasena(last_row_id, user, passwordHash)
                 flash(f'Usuario {name} registrado con exito!')
                 return redirect(url_for('index'))
@@ -167,9 +190,7 @@ def pageNoFound(error):
 
 @app.route('/cerrarSesion')
 def closeSesion():
-    listRoom = db.sql_consultar_habitaciones()
-    # listRoom = [["101", "Habitación Especial", "5", "https://i.pinimg.com/originals/4d/2a/c6/4d2ac66204416672fcc444b2bf2e6ac6.jpg"], ["102", "Habitación Sencilla", "3.5", "https://3.bp.blogspot.com/-0TJZXFkn1jo/XHoG0-VpbKI/AAAAAAAADFc/GMkvLd_D6Dkbl6nJy5u6JgSsCdj5mknBgCLcBGAs/s640/Asian%252Binspired%252Bluxurious%252Bbedroom.jpg"], ["103", "Habitación Sencilla", "4", "https://casaydiseno.com/wp-content/uploads/2020/09/habitacion-suite-ideas-diseno-chimenea.jpg"],
-    #             ["104", "Habitación Matrimonial", "5", "http://2.bp.blogspot.com/-gW8qrVLtUhE/URm12WBuQfI/AAAAAAAAig8/4BsvHqf8PDg/s1600/dormitorio-paredes-chocolate.jpg"], ["105", "Habitación Sencilla", "5", "https://www.guiaparadecorar.com/wp-content/uploads/2016/02/12-impresionantes-y-lujosas-habitaciones-de-hotel-04-e1456292481895.jpg"], ["106", "Habitación Sencilla", "3.9", "https://casaydiseno.com/wp-content/uploads/2015/03/cama-grande-techo-l%C3%A1mpara.jpg"]]
+    global listRoom
     data = {
         'title': 'Inicio',
         'description': "Hotel Mintic Ciclo 3 NCR 1873",

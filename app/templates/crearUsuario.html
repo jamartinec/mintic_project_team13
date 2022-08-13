@@ -76,6 +76,16 @@
           {% endfor %}
         </div>
 
+        {% if 'usuario' in session and (session['type_user'] == 1 or session['type_user'] == 2) %}
+        <div class="col-lg-12 col-sm-24 field-wrap">
+          {{ form.typeUsers.label(class="form-label") }}
+          {{ form.typeUsers(class="form-control") }}
+          {% for error in form.typeUsers.errors %}
+          <small class="error-small">{{ error }}</small>
+          {% endfor %}
+        </div>
+        {% endif %}
+
         <div class="col-lg-12 col-sm-24 field-wrap">
           {{ form.registerForm(class="button-login") }}
           {{ form.hidden_tag() }}

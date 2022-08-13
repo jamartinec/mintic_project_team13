@@ -23,7 +23,6 @@ def connect_execute(strsql, values):
 def sql_insert_user(user_name: str, fecha_creacion: str, nombre: str, mail: str, numero_documento: str, telefono: str, type_id: int):
     strsql, value = "INSERT INTO usuarios (user_name, fecha_creacion, nombre, mail, numero_documento, telefono, type_id) VALUES (?,?,?,?,?,?,?)", (user_name, fecha_creacion, nombre, mail, numero_documento, telefono, type_id)
     last_row_id = connect_execute(strsql, value)
-    print("last_row_id: ", str(last_row_id))
     return last_row_id
 
 
@@ -49,7 +48,6 @@ def sql_insert_reserva(room_id: int, fecha_inicio_reserva: str, fecha_fin_reserv
 
 def sql_select_reserva():
     strsql = "SELECT * FROM reservas;"
-    print(strsql)
     con = sql_connection()
     cursor_Obj = con.cursor()
     cursor_Obj.execute(strsql)
@@ -111,6 +109,36 @@ def sql_consultar_usuario(user_name: str):
         cursor_Obj = con.cursor()
         cursor_Obj.execute(strsql, value)
         flag = cursor_Obj.fetchone()
+        # con.commit()
+    return flag
+
+def sql_consultar_usuario_name(user_name: str):
+    strsql, value = "SELECT * FROM usuarios where user_name = ?", (user_name,)
+    
+    with sql_connection() as con:
+        cursor_Obj = con.cursor()
+        cursor_Obj.execute(strsql, value)
+        flag = cursor_Obj.fetchone()
+        # con.commit()
+    return flag
+
+def sql_consultar_usuarios():
+    strsql = "SELECT * FROM usuarios"
+    
+    with sql_connection() as con:
+        cursor_Obj = con.cursor()
+        cursor_Obj.execute(strsql)
+        flag = cursor_Obj.fetchall()
+        # con.commit()
+    return flag
+
+def sql_consultar_type_usuarios():
+    strsql = "SELECT * FROM tipo_usuario"
+    
+    with sql_connection() as con:
+        cursor_Obj = con.cursor()
+        cursor_Obj.execute(strsql)
+        flag = cursor_Obj.fetchall()
         # con.commit()
     return flag
 
