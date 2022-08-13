@@ -3,6 +3,9 @@ from forms.formLogin import FormLogin
 from forms.formRegister import FormRegister
 from forms.formReserve import FormReserve
 from settings.config import Configuration
+import database as db
+from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
@@ -89,15 +92,36 @@ def reserveRoom():
 
 @app.route('/registrar', methods=["GET", "POST"])
 def register():
-    formulario = FormRegister()
+
     data = {
         'title': 'Iniciar Sesion',
         'description': "Hotel Mintic Ciclo 3 NCR 1873"
     }
 
-    if formulario.validate_on_submit():
-        return redirect(url_for('index'))
-    return render_template('crearUsuario.html', data=data, form=formulario)
+    formulario = FormRegister()
+    if request.method == 'GET':
+
+        return render_template('crearUsuario.html', data=data, form=formulario)
+
+    if request.method == 'POST':
+        if formulario.validate_on_submit():
+            user = request.form["user"]
+            name = request.form["name"]
+            email = request.form["email"]
+            document = request.form["document"]
+            contact = request.form["contact"]
+            passwordHash = generate_password_hash(
+                request.form["password"], method='sha256')
+
+            if db.sql_existe_usuario(user, email) > 0:
+                flash(f'Usuario {user} ya existe!')
+            else:
+                last_row_id = db.sql_insert_user(
+                    user, datetime.now(), name, email, document, contact, 3)
+                db.sql_insert_contrasena(last_row_id, user, passwordHash)
+                flash(f'Usuario {name} registrado con exito!')
+                return redirect(url_for('index'))
+        return render_template('crearUsuario.html', data=data, form=formulario)
 
 # Función para validar cuando no es una ruta válida y se redirecciona al index
 
@@ -109,6 +133,8 @@ def pageNoFound(error):
     }
     # return render_template('404.html', data = data), 404
     return redirect(url_for('index'))
+
+# Función para cerra sesión
 
 
 @app.route('/cerrarSesion')

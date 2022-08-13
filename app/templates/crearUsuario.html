@@ -29,6 +29,22 @@
         </div>
 
         <div class="col-lg-12 col-sm-24 field-wrap">
+          {{ form.document.label(class="form-label") }}
+          {{ form.document(placeholder="Ingresar documento", class="form-control") }}
+          {% for error in form.document.errors %}
+          <small class="error-small">{{ error }}</small>
+          {% endfor %}
+        </div>
+
+        <div class="col-lg-12 col-sm-24 field-wrap">
+          {{ form.contact.label(class="form-label") }}
+          {{ form.contact(placeholder="Ingresar teléfono", class="form-control") }}
+          {% for error in form.contact.errors %}
+          <small class="error-small">{{ error }}</small>
+          {% endfor %}
+        </div>
+
+        <div class="col-lg-12 col-sm-24 field-wrap">
           {{ form.password.label(class="form-label") }}
           {{ form.password(placeholder="Ingresar contraseña", class="form-control") }}
           {% for error in form.password.errors %}
