@@ -75,19 +75,16 @@ def login():
             password = request.form.get("password")
             remember = formulario.remember.data
 
-            print("remember: ", remember)
-
             userInfo = db.sql_consultar_usuario(user)
 
             if userInfo is not None:
                 passwordHash = userInfo[2]
                 if check_password_hash(passwordHash, password):
-                    flash(f'Usuario {userInfo[1]} logueado correctamente!')
                     session['usuario'] = userInfo[1]
                     response = make_response(render_template(
                         'reservarHabitacion.html', data=data, form=formularioReserve))
                     response.set_cookie('visited', 'True')
-
+                    flash(f'Usuario {userInfo[1]} logueado correctamente!')
                     if remember:
                         print("remember if: ", remember)
                         response.set_cookie('user', session['usuario'])
@@ -97,6 +94,8 @@ def login():
                         response.set_cookie('user', "")
                         response.set_cookie('remember', 'False')
                     return response
+                else:
+                    flash(f'Usuario o contraseña incorrecta!')
             else:
                 flash(f'Usuario o contraseña incorrecta!')
         return render_template('iniciarSesion.html', data=data, form=formulario)
