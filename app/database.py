@@ -12,7 +12,6 @@ def sql_connection():
 def connect_execute(strsql):
     con = sql_connection()
     cursor_Obj = con.cursor()
-
     cursor_Obj.execute(strsql)
     last_row_id= cursor_Obj.lastrowid
     con.commit()
@@ -20,11 +19,11 @@ def connect_execute(strsql):
     return last_row_id
 
 def sql_insert_user(user_name: str, fecha_creacion: str, nombre: str,
-                    mail: str, numero_documento: str, telefono: str):
+                    mail: str, numero_documento: str, telefono: str, type_id: int):
 
-    strsql= ("INSERT INTO usuarios (user_name, fecha_creacion, nombre, mail, numero_documento,telefono) VALUES (?,?,?,?,?,?)",
-             (user_name, fecha_creacion, nombre, mail, numero_documento, telefono)
-             )
+    strsql = ("INSERT INTO usuarios (user_name, fecha_creacion, nombre, mail, numero_documento,telefono) VALUES (?,?,?,?,?,?)",
+              (user_name, fecha_creacion, nombre, mail, numero_documento, telefono)
+              )
 
     last_row_id = connect_execute(strsql)
     return last_row_id
@@ -64,10 +63,11 @@ def sql_insert_calificaciones(reserva_id: int, room_id: int, fecha_calificacion:
     )
     connect_execute(strsql)
 
+
 def sql_insert_contrasena(user_id: int, password: str):
     strsql = (
-        "INSERT INTO reservas (user_id, password) VALUES (?,?)",
-        (user_id, password)
+        "INSERT INTO reservas (user_id, user_name, password) VALUES (?,?,?)",
+        (user_id, user_name, password)
     )
     connect_execute(strsql)
 
@@ -79,12 +79,11 @@ def sql_insert_contrasena(user_id: int, password: str):
 # después de dar click en el botón registrar:
 # 1. Consultar la tabla de usuarios.
 def sql_existe_usuario(user_name: str, mail: str):
-    strsql = (
-        "EXISTS(SELECT * FROM usuarios where user_name = ? or mail = ?)", (user_name, mail)
-    )
-    with sql_connection()() as con:
+    strsql,value = "SELECT COUNT(*) FROM usuarios where user_name = ? or mail = ?;", (user_name, mail)
+    
+    with sql_connection() as con:
         cursor_Obj = con.cursor()
-        cursor_Obj.execute(strsql)
+        cursor_Obj.execute(strsql,value)
         flag = cursor_Obj.fetchone()
         #con.commit()
     return flag
@@ -103,7 +102,7 @@ def sql_select_available_rooms(fecha_izq: str, fecha_der: str):
         "SELECT DISTINCT * FROM habitaciones INNER JOIN reservas ON (reservas.room_id = habitaciones.room_id) WHERE (reservas.fecha_fin_reserva <= ?  OR reservas.fecha_inicio_reserva >= ? )",
         (fecha_izq, fecha_der)
     )
-    with sql_connection()() as con:
+    with sql_connection() as con:
         cursor_Obj = con.cursor()
         cursor_Obj.execute(strsql)
         list_rows_rooms = cursor_Obj.fetchall()
@@ -116,7 +115,7 @@ def sql_update_reserva(reserva_id: int, room_id: int, fecha_inicio_reserva: str,
         "UPDATE reserva SET room_id = ?, fecha_inicio_reserva= ?, fecha_fin_reserva= ? WHERE reserva_id=?",
         (room_id, fecha_inicio_reserva, fecha_fin_reserva, reserva_id)
     )
-    with sql_connection()() as con:
+    with sql_connection() as con:
         cur = con.cursor()
         cur.execute(strsql)
         con.commit()
@@ -130,8 +129,9 @@ def sql_insert_calificacion(reserva_id, room_id, fecha_calificacion, comentario,
     connect_execute(strsql)
 
 def count_number_calif_room(room_id: int):
-    strsql = ("SELECT COUNT(reserva_id) FROM calificaciones WHERE room_id = ? ", room_id)
-    with sql_connection()() as con:
+    strsql = (
+        "SELECT COUNT(reserva_id) FROM calificaciones WHERE room_id = ? ", room_id)
+    with sql_connection() as con:
         cursor_Obj = con.cursor()
         cursor_Obj.execute(strsql)
         conteo = cursor_Obj.fetchone()
@@ -143,7 +143,7 @@ def count_number_calif_room(room_id: int):
 def update_room_score(room_id: int, new_calificacion: float):
     # traer calificacion actual
     strsql = ("SELECT calificacion FROM calificaciones WHERE room_id = ? ", room_id)
-    with sql_connection()() as con:
+    with sql_connection() as con:
         cursor_Obj = con.cursor()
         cursor_Obj.execute(strsql)
         calificacion_prom = cursor_Obj.fetchone()
@@ -152,8 +152,7 @@ def update_room_score(room_id: int, new_calificacion: float):
     strsql = ("UPDATE habitacion SET calificacion = ? WHERE room_id=?",
               (new_calif_prom, room_id)
               )
-    with sql_connection()() as con:
+    with sql_connection() as con:
         cur = con.cursor()
         cur.execute(strsql)
         con.commit()
-    
