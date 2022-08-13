@@ -11,23 +11,24 @@ app = Flask(__name__)
 
 app.config.from_object(Configuration)
 
+listRoom = []
 
-@app.before_request
-def before_request():
-    if 'usuario' in session:
-        g.user = "Usuario logueado"
-    else:
-        g.user = None
+# @app.before_request
+# def before_request():
+#     listRoom = db.sql_consultar_habitaciones()
+#     print("listRoom: ", listRoom[0][5])
+
 
 # Ruta principal, inicio de la aplicación
 
 
 @app.route('/')
 def index():
+    listRoom = db.sql_consultar_habitaciones()
     visited = request.cookies.get("visited")
     formulario = FormReserve()
-    listRoom = [["101", "Habitación Especial", "5", "https://i.pinimg.com/originals/4d/2a/c6/4d2ac66204416672fcc444b2bf2e6ac6.jpg"], ["102", "Habitación Sencilla", "3.5", "https://3.bp.blogspot.com/-0TJZXFkn1jo/XHoG0-VpbKI/AAAAAAAADFc/GMkvLd_D6Dkbl6nJy5u6JgSsCdj5mknBgCLcBGAs/s640/Asian%252Binspired%252Bluxurious%252Bbedroom.jpg"], ["103", "Habitación Sencilla", "4", "https://casaydiseno.com/wp-content/uploads/2020/09/habitacion-suite-ideas-diseno-chimenea.jpg"],
-                ["104", "Habitación Matrimonial", "5", "http://2.bp.blogspot.com/-gW8qrVLtUhE/URm12WBuQfI/AAAAAAAAig8/4BsvHqf8PDg/s1600/dormitorio-paredes-chocolate.jpg"], ["105", "Habitación Sencilla", "5", "https://www.guiaparadecorar.com/wp-content/uploads/2016/02/12-impresionantes-y-lujosas-habitaciones-de-hotel-04-e1456292481895.jpg"], ["106", "Habitación Sencilla", "3.9", "https://casaydiseno.com/wp-content/uploads/2015/03/cama-grande-techo-l%C3%A1mpara.jpg"]]
+    # listRoom = [["101", "Habitación Especial", "5", "https://i.pinimg.com/originals/4d/2a/c6/4d2ac66204416672fcc444b2bf2e6ac6.jpg"], ["102", "Habitación Sencilla", "3.5", "https://3.bp.blogspot.com/-0TJZXFkn1jo/XHoG0-VpbKI/AAAAAAAADFc/GMkvLd_D6Dkbl6nJy5u6JgSsCdj5mknBgCLcBGAs/s640/Asian%252Binspired%252Bluxurious%252Bbedroom.jpg"], ["103", "Habitación Sencilla", "4", "https://casaydiseno.com/wp-content/uploads/2020/09/habitacion-suite-ideas-diseno-chimenea.jpg"],
+    #             ["104", "Habitación Matrimonial", "5", "http://2.bp.blogspot.com/-gW8qrVLtUhE/URm12WBuQfI/AAAAAAAAig8/4BsvHqf8PDg/s1600/dormitorio-paredes-chocolate.jpg"], ["105", "Habitación Sencilla", "5", "https://www.guiaparadecorar.com/wp-content/uploads/2016/02/12-impresionantes-y-lujosas-habitaciones-de-hotel-04-e1456292481895.jpg"], ["106", "Habitación Sencilla", "3.9", "https://casaydiseno.com/wp-content/uploads/2015/03/cama-grande-techo-l%C3%A1mpara.jpg"]]
     if visited == 'True':
         data = {
             'title': 'Reservar Habitación',
@@ -48,37 +49,65 @@ def index():
 
 @app.route('/iniciarSesion', methods=["GET", "POST"])
 def login():
-    listRoom = [["101", "Habitación Especial", "5", "https://i.pinimg.com/originals/4d/2a/c6/4d2ac66204416672fcc444b2bf2e6ac6.jpg"], ["102", "Habitación Sencilla", "3.5", "https://3.bp.blogspot.com/-0TJZXFkn1jo/XHoG0-VpbKI/AAAAAAAADFc/GMkvLd_D6Dkbl6nJy5u6JgSsCdj5mknBgCLcBGAs/s640/Asian%252Binspired%252Bluxurious%252Bbedroom.jpg"], ["103", "Habitación Sencilla", "4", "https://casaydiseno.com/wp-content/uploads/2020/09/habitacion-suite-ideas-diseno-chimenea.jpg"],
-                ["104", "Habitación Matrimonial", "5", "http://2.bp.blogspot.com/-gW8qrVLtUhE/URm12WBuQfI/AAAAAAAAig8/4BsvHqf8PDg/s1600/dormitorio-paredes-chocolate.jpg"], ["105", "Habitación Sencilla", "5", "https://www.guiaparadecorar.com/wp-content/uploads/2016/02/12-impresionantes-y-lujosas-habitaciones-de-hotel-04-e1456292481895.jpg"], ["106", "Habitación Sencilla", "3.9", "https://casaydiseno.com/wp-content/uploads/2015/03/cama-grande-techo-l%C3%A1mpara.jpg"]]
+
+    listRoom = db.sql_consultar_habitaciones()
+    if request.cookies.get("remember") == 'True':
+        checkRemember = True
+    else:
+        checkRemember = False
+
     data = {
         'title': 'Reservar Habitación',
         'description': "Hotel Mintic Ciclo 3 NCR 1873",
-        'listRoom': listRoom
-    }
+        'listRoom': listRoom,
+        'checkRemember': checkRemember,
+        'userRemember': request.cookies.get("user")
+        }
     formulario = FormLogin()
     formularioReserve = FormReserve()
-    data = {
-        'title': 'Iniciar Sesion',
-        'description': "Hotel Mintic Ciclo 3 NCR 1873",
-        'listRoom': listRoom
-    }
+    if request.method == 'GET':
+        return render_template('iniciarSesion.html', data=data, form=formulario)
 
-    if formulario.validate_on_submit():
-        flash("Se solicita iniciar sesión {}, recordar{}".format(
-            formulario.user.data, formulario.remember.data))
-        session['usuario'] = "Usuario Logueado"
-        response = make_response(render_template(
-            'reservarHabitacion.html', data=data, form=formularioReserve))
-        response.set_cookie('visited', 'True')
-        return response
-    return render_template('iniciarSesion.html', data=data, form=formulario)
+    if request.method == 'POST':
+        if formulario.validate_on_submit():
+
+            user = request.form.get("user")
+            password = request.form.get("password")
+            remember = formulario.remember.data
+
+            print("remember: ", remember)
+
+            userInfo = db.sql_consultar_usuario(user)
+
+            if userInfo is not None:
+                passwordHash = userInfo[2]
+                if check_password_hash(passwordHash, password):
+                    flash(f'Usuario {userInfo[1]} logueado correctamente!')
+                    session['usuario'] = userInfo[1]
+                    response = make_response(render_template(
+                        'reservarHabitacion.html', data=data, form=formularioReserve))
+                    response.set_cookie('visited', 'True')
+
+                    if remember:
+                        print("remember if: ", remember)
+                        response.set_cookie('user', session['usuario'])
+                        response.set_cookie('remember', 'True')
+                    else:
+                        print("remember else: ", remember)
+                        response.set_cookie('user', "")
+                        response.set_cookie('remember', 'False')
+                    return response
+            else:
+                flash(f'Usuario o contraseña incorrecta!')
+        return render_template('iniciarSesion.html', data=data, form=formulario)
 
 
 # Ruta para reservar habitación del usuario
 @app.route('/reserveRoom', methods=["GET", "POST"])
 def reserveRoom():
-    listRoom = [["101", "Habitación Especial", "5", "https://i.pinimg.com/originals/4d/2a/c6/4d2ac66204416672fcc444b2bf2e6ac6.jpg"], ["102", "Habitación Sencilla", "3.5", "https://3.bp.blogspot.com/-0TJZXFkn1jo/XHoG0-VpbKI/AAAAAAAADFc/GMkvLd_D6Dkbl6nJy5u6JgSsCdj5mknBgCLcBGAs/s640/Asian%252Binspired%252Bluxurious%252Bbedroom.jpg"], ["103", "Habitación Sencilla", "4", "https://casaydiseno.com/wp-content/uploads/2020/09/habitacion-suite-ideas-diseno-chimenea.jpg"],
-                ["104", "Habitación Matrimonial", "5", "http://2.bp.blogspot.com/-gW8qrVLtUhE/URm12WBuQfI/AAAAAAAAig8/4BsvHqf8PDg/s1600/dormitorio-paredes-chocolate.jpg"], ["105", "Habitación Sencilla", "5", "https://www.guiaparadecorar.com/wp-content/uploads/2016/02/12-impresionantes-y-lujosas-habitaciones-de-hotel-04-e1456292481895.jpg"], ["106", "Habitación Sencilla", "3.9", "https://casaydiseno.com/wp-content/uploads/2015/03/cama-grande-techo-l%C3%A1mpara.jpg"]]
+    listRoom = db.sql_consultar_habitaciones()
+    # listRoom = [["101", "Habitación Especial", "5", "https://i.pinimg.com/originals/4d/2a/c6/4d2ac66204416672fcc444b2bf2e6ac6.jpg"], ["102", "Habitación Sencilla", "3.5", "https://3.bp.blogspot.com/-0TJZXFkn1jo/XHoG0-VpbKI/AAAAAAAADFc/GMkvLd_D6Dkbl6nJy5u6JgSsCdj5mknBgCLcBGAs/s640/Asian%252Binspired%252Bluxurious%252Bbedroom.jpg"], ["103", "Habitación Sencilla", "4", "https://casaydiseno.com/wp-content/uploads/2020/09/habitacion-suite-ideas-diseno-chimenea.jpg"],
+    #             ["104", "Habitación Matrimonial", "5", "http://2.bp.blogspot.com/-gW8qrVLtUhE/URm12WBuQfI/AAAAAAAAig8/4BsvHqf8PDg/s1600/dormitorio-paredes-chocolate.jpg"], ["105", "Habitación Sencilla", "5", "https://www.guiaparadecorar.com/wp-content/uploads/2016/02/12-impresionantes-y-lujosas-habitaciones-de-hotel-04-e1456292481895.jpg"], ["106", "Habitación Sencilla", "3.9", "https://casaydiseno.com/wp-content/uploads/2015/03/cama-grande-techo-l%C3%A1mpara.jpg"]]
     formulario = FormReserve()
     data = {
         'title': 'Reservar Habitación',
@@ -99,17 +128,17 @@ def register():
     }
 
     formulario = FormRegister()
-    if request.method == 'GET':
 
+    if request.method == 'GET':
         return render_template('crearUsuario.html', data=data, form=formulario)
 
     if request.method == 'POST':
         if formulario.validate_on_submit():
-            user = request.form["user"]
-            name = request.form["name"]
-            email = request.form["email"]
-            document = request.form["document"]
-            contact = request.form["contact"]
+            user = request.form.get("user")
+            name = request.form.get("name")
+            email = request.form.get("email")
+            document = request.form.get("document")
+            contact = request.form.get("contact")
             passwordHash = generate_password_hash(
                 request.form["password"], method='sha256')
 
@@ -139,15 +168,16 @@ def pageNoFound(error):
 
 @app.route('/cerrarSesion')
 def closeSesion():
-    listRoom = [["101", "Habitación Especial", "5", "https://i.pinimg.com/originals/4d/2a/c6/4d2ac66204416672fcc444b2bf2e6ac6.jpg"], ["102", "Habitación Sencilla", "3.5", "https://3.bp.blogspot.com/-0TJZXFkn1jo/XHoG0-VpbKI/AAAAAAAADFc/GMkvLd_D6Dkbl6nJy5u6JgSsCdj5mknBgCLcBGAs/s640/Asian%252Binspired%252Bluxurious%252Bbedroom.jpg"], ["103", "Habitación Sencilla", "4", "https://casaydiseno.com/wp-content/uploads/2020/09/habitacion-suite-ideas-diseno-chimenea.jpg"],
-                ["104", "Habitación Matrimonial", "5", "http://2.bp.blogspot.com/-gW8qrVLtUhE/URm12WBuQfI/AAAAAAAAig8/4BsvHqf8PDg/s1600/dormitorio-paredes-chocolate.jpg"], ["105", "Habitación Sencilla", "5", "https://www.guiaparadecorar.com/wp-content/uploads/2016/02/12-impresionantes-y-lujosas-habitaciones-de-hotel-04-e1456292481895.jpg"], ["106", "Habitación Sencilla", "3.9", "https://casaydiseno.com/wp-content/uploads/2015/03/cama-grande-techo-l%C3%A1mpara.jpg"]]
+    listRoom = db.sql_consultar_habitaciones()
+    # listRoom = [["101", "Habitación Especial", "5", "https://i.pinimg.com/originals/4d/2a/c6/4d2ac66204416672fcc444b2bf2e6ac6.jpg"], ["102", "Habitación Sencilla", "3.5", "https://3.bp.blogspot.com/-0TJZXFkn1jo/XHoG0-VpbKI/AAAAAAAADFc/GMkvLd_D6Dkbl6nJy5u6JgSsCdj5mknBgCLcBGAs/s640/Asian%252Binspired%252Bluxurious%252Bbedroom.jpg"], ["103", "Habitación Sencilla", "4", "https://casaydiseno.com/wp-content/uploads/2020/09/habitacion-suite-ideas-diseno-chimenea.jpg"],
+    #             ["104", "Habitación Matrimonial", "5", "http://2.bp.blogspot.com/-gW8qrVLtUhE/URm12WBuQfI/AAAAAAAAig8/4BsvHqf8PDg/s1600/dormitorio-paredes-chocolate.jpg"], ["105", "Habitación Sencilla", "5", "https://www.guiaparadecorar.com/wp-content/uploads/2016/02/12-impresionantes-y-lujosas-habitaciones-de-hotel-04-e1456292481895.jpg"], ["106", "Habitación Sencilla", "3.9", "https://casaydiseno.com/wp-content/uploads/2015/03/cama-grande-techo-l%C3%A1mpara.jpg"]]
     data = {
         'title': 'Inicio',
         'description': "Hotel Mintic Ciclo 3 NCR 1873",
         'listRoom': listRoom
     }
-    flash("Sesion cerrada")
     session.clear()
+    flash(f'Sesion cerrada!')
     response = make_response(render_template(
         'index.html', data=data))
     response.set_cookie('visited', 'False')
