@@ -141,8 +141,16 @@ def reserveRoom():
     if request.method == 'POST':
         return render_template('reservarHabitacion.html', data=data, form=formulario)
 
-# Ruta para el registro del usuario
-
+# Ruta para editar reserva
+@app.route('/editarReserva', methods=["GET", "POST"])
+def editarReserva():
+    global listRoom
+    data = {
+        'title': 'Editar Reservacion',
+        'description': "Hotel Mintic Ciclo 3 NCR 1873",
+        'listRoom': listRoom
+    }
+    return render_template('editarReserva.html', data=data,)
 
 @app.route('/registrar', methods=["GET", "POST"])
 def register():
